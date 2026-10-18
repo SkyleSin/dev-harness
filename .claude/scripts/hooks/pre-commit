@@ -1,0 +1,5 @@
+#!/bin/sh
+# 하네스 경계·형식 점검. 위반이 있으면 커밋을 막는다.
+# 하네스 저장소와 knowledge/ 저장소가 함께 쓴다 (각 저장소의 core.hooksPath 가 이 폴더를 가리킨다).
+ROOT="$(cd "$(dirname "$0")/../../.." && pwd)" || exit 1
+python3 -I "$ROOT/.claude/scripts/check-harness.py"

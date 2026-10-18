@@ -1,0 +1,86 @@
+# 실행 산출물 — 계약
+
+`work-orchestrator` 하네스의 실행 산출물 규약. 산출물은 하네스 저장소가 아니라 환경별 지식 저장소(`knowledge/`)에 쌓인다.
+
+## 폴더
+
+```
+knowledge/
+├── runs/{YYYYMMDD}-{TARGET_SLUG}-{slug}/   한 번의 실행 (실행마다 폴더가 따로 생긴다)
+└── baselines/{TARGET_SLUG}/                 대상별 테스트 baseline (실행 사이에 공유)
+```
+
+`TARGET_SLUG` 는 대상 폴더의 `/` 를 `-` 로 바꾼 값이다 (`apps/service-a` → `apps-service-a`). 실행 폴더는 옮기거나 지우지 않고 그대로 쌓는다.
+
+## 실행 폴더의 파일 지도
+
+| 파일 | 만드는 역할 | 다음 읽는 역할 | 재사용 |
+| --- | --- | --- | --- |
+| `status.md` | orchestrator | orchestrator | 진행 상태, 재개·부분 재실행의 기준 |
+| `00-input.md` | orchestrator | 전원 | 요청 정리, `regression_mode` |
+| `01-design.md` | work-architect | Gate 1 사용자, implementer, tester, reviewer | 설계 근거 |
+| `decisions.md` | architect(항목 등록) + 사용자(답) + Claude(답변·체크) | architect, Gate 1 사용자, 이후 전원 | 질문·답변·결정 기록 |
+| `02-implementation.md` | work-implementer | tester, reviewer | 변경 요약 |
+| `03-tests.md` | work-tester | reviewer | targeted 테스트 결과 |
+| `04-regression.md` | work-tester | reviewer | 전체 회귀 결과 |
+| `05-review.md` | work-reviewer | orchestrator(Gate 2) | 최종 판정 |
+| `final.md` | orchestrator | 사용자, 다음 실행 | 커밋 메시지 초안, 변경 요약, 남은 위험 |
+| `improvement-log.md` | orchestrator | 다음 개선 | 프로젝트 문서 갱신 후보, 하네스 개선 아이디어 |
+
+## status.md 양식
+
+```md
+mode: subagent
+target: apps/service-a
+regression_mode: full | skip
+created: 2026-10-16 14:00
+
+| step | owner | status | output | updated | note |
+```
+
+status 값: `pending` / `in_progress` / `done` / `blocked`(사유 필수) / `skipped`.
+
+## decisions.md 양식
+
+설계 중 생기는 질문과 사용자 결정을 한 파일에 모은다. 설계 문서(`01-design.md`)에는 질문을 쓰지 않고 항목 제목으로만 인용한다.
+
+```md
+- [ ] psycopg2 를 pyproject 에 남겨도 될까요?
+  - 배경: ... 가 sync 드라이버로 요구합니다 (근거: engine.py:to_sync_url).
+  - 권장: 남김.
+  -> psycopg2 가 뭔지 알려줘
+  - psycopg2 란 ... 이라서 ... 때문에 남기는 것을 권장합니다.
+  ->
+```
+
+- 항목 제목은 `- [ ] ` 로 시작하는 **대답할 수 있는 질문 한 문장**이다. 값만 적지 않는다 ("포트: 9024" ✗ → "앱 포트를 9024 로 해도 될까요?" ✓).
+- `  - ` 로 시작하는 줄은 **Claude** 발언 (배경, 권장, 설명, 답변). `  ->` 로 시작하는 줄은 **사용자** 발언 (답, 질문, 결정). 서로의 줄은 고치지 않고 아래에 이어 쓴다.
+- 항목마다 끝에 빈 `  ->` 줄을 둔다. 사용자가 답을 적는 자리다. 사용자가 `->` 로 질문하면 Claude 가 그 아래에 `  - ` 줄로 답하고 새 빈 `  ->` 줄을 남긴다.
+- `[x]` 는 **해결됐다**는 뜻이며 **Claude 가 판단**해서 표시한다. 사용자의 마지막 `->` 가 결정이고 남은 질문·모호함·확인할 사실이 없으면 `[x]`, 하나라도 남으면 `[ ]` 로 두고 이유를 `  - ` 줄에 적는다. `->` 가 빈 칸이면 권장안 수락 신호로 보되 Claude 가 확인한 뒤 확정한다.
+- `[x]` 뒤에 사용자가 이의를 적으면 Claude 가 `[ ]` 로 되돌리고 답한다.
+- 항목 등록은 architect 가 한다 (사용자가 정해야 하는 결정만). **Claude 가 직접 확인할 수 있는 사실은 항목으로 올리지 않고** 확인해서 근거로 쓴다. 사용자도 같은 형식으로 항목을 추가할 수 있다.
+- 설계는 `[x]` 항목만 확정으로 취급한다. `[ ]` 항목은 권장안을 가정하되 설계에 "미확정 (decisions.md: 제목)" 으로 표시한다.
+- Gate 1 에서 `[ ]` 항목 목록을 먼저 사용자에게 알린다.
+
+## baselines
+
+- `failures.txt` — **알려진 실패** 노드 ID. 실패가 0건이면 빈 파일이 정상이다.
+- `inventory.txt` — **통과한 전체** 노드 ID. 테스트 소실 감지용.
+- 두 파일의 성격을 섞지 않는다. 자세한 규칙은 `regression-run` 스킬.
+
+## 승인 게이트
+
+- **Gate 1** (`01-design.md` 뒤): 사용자가 설계를 승인해야 T02 진행.
+- **Gate 2** (`05-review.md` 뒤): 리뷰가 pass 여야 `final.md` 진행.
+
+## 실패 라우팅
+
+`05-review.md` 의 실패 유형별:
+
+| 유형 | 대상 |
+| --- | --- |
+| 코드 이슈, 회귀 | implementer 재작업 |
+| 테스트 이슈 | tester 재작업 |
+| 브리프 애매 | architect + 사용자 |
+
+재작업은 대상별 최대 1회이고 두 번째 실패는 사용자에게 보고한다.

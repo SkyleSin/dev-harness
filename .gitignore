@@ -1,0 +1,10 @@
+# 하네스만 추적한다. workplace 의 다른 폴더(프로젝트 저장소, knowledge/)는 모두 제외.
+/*
+!/.gitignore
+!/CLAUDE.md
+!/README.md
+!/.claude/
+!/knowledge-template/
+
+# 로컬 전용
+.claude/settings.local.json

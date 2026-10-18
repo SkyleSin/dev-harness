@@ -1,0 +1,25 @@
+---
+name: commit
+description: 변경사항을 커밋한다. `.claude/rules/commit.md` 의 규약(접두사, 메시지 형식, 금지)에 따라 상태를 확인하고 테스트를 거쳐 메시지를 작성해 커밋한다. 사용자가 "커밋해줘", "커밋하자", "/commit" 이라고 할 때 사용한다. push 와 PR 은 하지 않는다.
+---
+
+# commit
+
+## Overview
+
+규약(무엇을 어떻게 쓰는가)은 `.claude/rules/commit.md` 에 있고, 이 스킬은 커밋하는 절차만 다룬다. 규약을 이 파일에 다시 적지 않는다.
+
+## Workflow
+
+1. 대상 저장소를 정한다: 지금 작업 중인 저장소(workplace 루트 또는 `apps/…`, `tools/…` 하위 저장소). 변경이 여러 저장소에 걸쳐 있거나 애매하면 묻는다. 이후 `git -C {저장소}` 로 실행한다.
+2. 아래 명령을 병렬로 실행해 상태를 파악한다: `git status`, `git diff`(staged + unstaged), `git log --oneline -5`(최근 스타일), `git branch --show-current`.
+3. 접두사를 브랜치명에서 정한다 (표는 규약 문서).
+4. 규약에 맞춰 메시지를 쓴다. 사용자가 `$ARGUMENTS` 로 내용을 주면 반영한다.
+5. 테스트: `pytest --collect-only -q` 로 수집되는 테스트가 있으면 `pytest` 를 실행한다. 실패하면 커밋을 보류하고 실패 내용을 보고한다 (사용자가 무시를 명시하면 진행). 테스트가 없으면 없이 진행할지 먼저 확인한다. 테스트 실행 방식은 통일안이 확정되면 갱신한다.
+6. 관련 파일만 staging 하고 HEREDOC 으로 커밋한다.
+7. 결과(커밋 해시, 파일 수)를 보고한다. push 는 하지 않는다.
+
+## 예외
+
+- pre-commit hook 이 실패하면 오류를 고치고 **새 커밋**을 만든다 (amend 금지).
+- 민감 파일(`.env`, credentials 등)이 변경에 섞여 있으면 제외하고 알린다.
