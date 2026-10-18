@@ -4,7 +4,6 @@
 !/CLAUDE.md
 !/README.md
 !/.claude/
-!/knowledge-template/
 
 # 로컬 전용
 .claude/settings.local.json

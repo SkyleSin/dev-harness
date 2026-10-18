@@ -20,7 +20,7 @@ description: 코드가 이미 있는 대상 폴더(예 apps/service-c)를 개발
 
 ## Workflow
 
-1. `knowledge/` 가 있는지 확인한다. 없으면 workplace `README.md` 의 셋업 절차(지식 저장소 clone 또는 `knowledge-template/` 복사)를 안내하고 중단한다. `TARGET` 이 실제 폴더이고 `.git` 외 파일이 있는지 확인한다. 비어 있으면 "골격이 없는 폴더는 이 스킬의 범위가 아님" 을 안내하고 중단한다.
+1. `knowledge/` 가 있는지 확인한다. 없으면 workplace `README.md` 의 셋업 절차(지식 저장소 clone 또는 `.claude/knowledge-template/` 복사)를 안내하고 중단한다. `TARGET` 이 실제 폴더이고 `.git` 외 파일이 있는지 확인한다. 비어 있으면 "골격이 없는 폴더는 이 스킬의 범위가 아님" 을 안내하고 중단한다.
 2. 다음을 스캔한다: 의존성 파일(`pyproject.toml`, `requirements*`, `package.json` 등), `Dockerfile`·`docker-compose*`·`entrypoint*`, CI 설정, `README*`, 마이그레이션 폴더, `tests/` 구조와 conftest, 주요 패키지 폴더(실제 존재하는 것만).
 3. 파일 근거로만 추론한다: 프레임워크, 사용 인프라, 계층 구조, 실행 포트, 이미지 경로, 실행·테스트·lint·type 명령.
 4. 같은 그룹의 기존 문서(`knowledge/docs/{그룹}/{다른 대상}/overview.md`)를 참조 양식으로 삼되, 존재하지 않는 계층과 섹션은 통째로 생략한다.

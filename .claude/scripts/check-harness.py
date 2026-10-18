@@ -223,7 +223,7 @@ def main() -> int:
     if not KNOW.exists():
         warnings.append(
             "knowledge/ 가 없다: 지식 문서·도메인 용어 점검을 건너뛴다 "
-            "(지식 저장소를 clone 하거나 cp -r knowledge-template knowledge)"
+            "(지식 저장소를 clone 하거나 cp -r .claude/knowledge-template knowledge)"
         )
     else:
         kb = load_boundary(KBOUNDARY)

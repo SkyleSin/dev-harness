@@ -20,12 +20,12 @@ Claude Code 로 여러 프로젝트를 한 workplace 에서 개발할 때 쓰는
 │                      test-authoring-and-run, regression-run, code-review-checklist,
 │                      project-onboarding, commit
 ├── rules/commit.md    커밋 규약 (절차는 commit 스킬)
+├── knowledge-template/  지식 저장소 골격: README.md (대상 인덱스), boundary.txt, docs/, runs/, baselines/
 ├── docs/
 │   ├── README.md      프로젝트 문서 계약 (구조, 꼬리표, rules.md 고정 제목, reference/ 규칙)
 │   ├── runs.md        실행 산출물 계약 (파일 지도, status.md · decisions.md 양식, baseline)
 │   └── harness/       decisions.md, todo.md, changelog.md, lessons.md, boundary.txt (하네스 식별자)
 └── scripts/           check-harness.py (경계·형식 점검), hooks/pre-commit
-knowledge-template/    지식 저장소 골격: README.md (대상 인덱스), boundary.txt, docs/, runs/, baselines/
 CLAUDE.md              라우팅과 위치 안내
 ```
 
@@ -51,7 +51,7 @@ workplace/            하네스 저장소 (이 저장소, 환경 공통)
 1. 하네스 저장소를 workplace 로 clone 한다: `git clone <하네스 저장소> <workplace>` 후 `git config core.hooksPath .claude/scripts/hooks`
 2. 지식 저장소를 준비한다.
    - 이미 있으면: `git clone <지식 저장소> <workplace>/knowledge`
-   - 처음이면: `cp -r knowledge-template knowledge && git -C knowledge init -b main`
+   - 처음이면: `cp -r .claude/knowledge-template knowledge && git -C knowledge init -b main`
    - 어느 쪽이든: `git -C knowledge config core.hooksPath ../.claude/scripts/hooks`
 3. `knowledge/boundary.txt` 를 고친다.
    - `[doc-groups]`: 프로젝트 폴더들의 최상위 그룹 이름 (예: `apps`, `services`)
