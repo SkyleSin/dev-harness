@@ -13,3 +13,4 @@
 | 2026-10-19 | 커밋 대상을 하네스·`knowledge/`·코드 저장소 세 곳으로 명시하고 저장소별로 따로 커밋하도록 `commit` 스킬 1·3단계, `CLAUDE.md` 규칙, `work-orchestrator` T06 의 `final.md`, `runs.md` 파일 지도를 갱신 | `.claude/skills/commit/`, `CLAUDE.md`, `.claude/skills/work-orchestrator/`, `.claude/docs/runs.md` | 저장소를 셋으로 나눈 뒤 커밋할 곳을 빠뜨리지 않게 하기 위함 |
 | 2026-10-19 | `todo.md` 에서 환경 셋업 항목(경계 사전 채우기, 첫 대상 편입)을 삭제 | `.claude/docs/harness/todo.md` | 하네스 개선 항목이 아니라 설치 절차(`README.md` 3·6단계)와 중복이었음 |
 | 2026-10-19 | 첫 실전 완료: 소규모 기능 1건을 전 단계(두 Gate 포함)로 완주. 리뷰 pass, 회귀 신규 실패 0건, baseline 신설은 승인 후 저장. 막힌 지점: 테스트·타입 체크 실행 방식이 프로젝트 규칙 문서에 명시되지 않아 실행마다 에이전트 프롬프트로 전달됨 | `.claude/docs/harness/todo.md` | 첫 실전 검증. 도메인 보강은 해당 프로젝트 문서 갱신 후보로 처리 |
+| 2026-10-19 | `work-reviewer` 와 `code-review-checklist` 에 "baseline 상태는 앞 산출물이 아니라 리뷰 시점의 실제 파일로 확인" 지침을 추가 | `.claude/agents/work-reviewer.md`, `.claude/skills/code-review-checklist/SKILL.md` | "리뷰만 다시" 재실행 시 리뷰어가 낡은 `04` 의 baseline 없음 서술을 그대로 옮겨 이미 신설된 baseline 을 없다고 판정함 |
