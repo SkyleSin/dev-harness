@@ -24,7 +24,7 @@ knowledge/
 | `03-tests.md` | work-tester | reviewer | targeted 테스트 결과 |
 | `04-regression.md` | work-tester | reviewer | 전체 회귀 결과 |
 | `05-review.md` | work-reviewer | orchestrator(Gate 2) | 최종 판정 |
-| `final.md` | orchestrator | 사용자, 다음 실행 | 커밋 메시지 초안, 변경 요약, 남은 위험 |
+| `final.md` | orchestrator | 사용자, 다음 실행 | 커밋 메시지 초안, 변경 요약, 남은 위험, 커밋이 필요한 저장소(코드·`knowledge/`) |
 | `improvement-log.md` | orchestrator | 다음 개선 | 프로젝트 문서 갱신 후보, 하네스 개선 아이디어 |
 
 ## status.md 양식

@@ -35,5 +35,6 @@
 - 도메인 지식(규약, 명령)은 하네스 스킬에 넣지 않고 `knowledge/docs/` 의 프로젝트 문서에 둔다. 문서 구조·꼬리표·`reference/` 규칙은 `.claude/docs/README.md`, 금지 용어는 `knowledge/boundary.txt`(도메인 용어)와 `.claude/docs/harness/boundary.txt`(하네스 식별자).
 - 하네스 저장소(`.claude/`, `CLAUDE.md`, `README.md`)에는 프로젝트 이름·사실을 쓰지 않는다. 대상 편입 기록도 `knowledge/` 에만 남긴다.
 - 저장소를 새로 clone 했다면 한 번 `git config core.hooksPath .claude/scripts/hooks` 를, `knowledge/` 에서는 `git config core.hooksPath ../.claude/scripts/hooks` 를 실행한다. `core.hooksPath` 는 `.git/config` 에 저장되어 추적되지 않는다.
+- 커밋 대상은 하네스(workplace 루트), `knowledge/`, 실제 코드 저장소 세 곳이다. 저장소마다 따로 커밋한다 (절차: `commit` 스킬).
 - 하네스나 문서를 고친 뒤에는 `python3 -I .claude/scripts/check-harness.py` 를 실행한다. 커밋 때 git hook 이 같은 점검을 하고 위반이면 커밋을 막는다.
 - 개발 실행은 `knowledge/docs/` 를 자동으로 수정하지 않는다. 반영은 `improvement-log.md` 후보 → 사용자 승인 순서다.
