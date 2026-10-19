@@ -1,7 +1,7 @@
 # 개발 하네스 청사진 (초안)
 
 `harness-lab` Phase 0~7 순서의 초기 설계. 이후 변경은 이 문서가 아니라 실제 파일과 `changelog.md` 가 기준이다.
-범용 규칙은 `lessons.md`. 환경별 결정·이력은 `knowledge/harness-history/`.
+범용 규칙은 `lessons.md`, 결정은 `decisions.md`.
 
 ## Phase 0. 현재 상황
 
