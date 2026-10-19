@@ -1,6 +1,6 @@
 ---
 name: work-orchestrator
-description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를 지정한 기능 추가·변경·리팩터링 요청을 설계-구현-테스트-회귀-리뷰 파이프라인으로 처리한다. 초기 실행뿐 아니라 "이어서", "리뷰만 다시", "테스트만 다시", "구현부터 다시", "regression skip 으로 다시", "부분 수정" 같은 재실행 요청도 처리한다. 자연어 예) "apps/service-a 에 X 추가해줘", "service-b 의 Y 리팩터링", "리뷰만 다시 실행". 하네스 자체를 고치는 요청은 harness-lab 이 맡는다.
+description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를 지정한 기능 추가·변경·리팩터링 요청을 설계-구현-테스트-회귀-리뷰 파이프라인으로 처리한다. 초기 실행뿐 아니라 "이어서", "리뷰만 다시", "테스트만 다시", "구현부터 다시", "regression skip 으로 다시", "부분 수정" 같은 재실행 요청도 처리한다. 자연어 예) "apps/service-a 에 X 추가해줘", "service-b 의 Y 리팩터링", "리뷰만 다시 실행". 대상 폴더의 코드 변경이면 한 줄·문구·docstring 수정처럼 작은 요청도 이 스킬을 거치며 직접 편집하지 않는다. 하네스 자체를 고치는 요청은 harness-lab 이 맡는다.
 ---
 
 # work-orchestrator

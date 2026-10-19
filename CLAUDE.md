@@ -7,6 +7,7 @@
 대상 폴더의 기능 추가·변경·리팩터링 요청은 `work-orchestrator` 로 처리한다. 스킬 이름을 입력하지 않아도 아래처럼 대상과 작업이 드러나면 이 오케스트레이터로 라우팅한다.
 
 - "apps/service-a 에 {기능} 추가해줘" / "service-b 의 {부분} 리팩터링" → `work-orchestrator`
+- 대상 폴더의 코드를 바꾸는 요청은 변경 규모와 상관없이 `work-orchestrator` 를 거친다. 한 줄·문구·docstring 수정도 예외가 아니며, 직접 편집하지 않는다. `Agent` 도구가 없으면 직접 하지 말고 보고하고 멈춘다.
 - "리뷰만 다시" / "구현부터 다시" / "이어서" / "regression skip 으로 다시" → `work-orchestrator`
 - "{폴더} 를 하네스에 추가" / "온보딩" / "개발 문서 만들어줘" → `project-onboarding`
 - "커밋해줘" / "/commit" → `commit`
