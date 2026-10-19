@@ -19,6 +19,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`, `TARGET_SLUG`, `RUN_DI
 - targeted 테스트를 실행하고 `{RUN_DIR}/03-tests.md` 에 정리합니다 (T03).
 - targeted 가 통과하고 `regression_mode` 가 `full` 이면 전체 회귀를 실행해 `{RUN_DIR}/04-regression.md` 에 정리합니다 (T04).
 - baseline(`knowledge/baselines/{TARGET_SLUG}/failures.txt`, `inventory.txt`)을 규칙대로 관리합니다.
+- 수정 금지 제약이 있으면 `pre-commit` 은 `--all-files` 없이 내가 작성한 파일만 지정하고, 제약 대상 파일이 바뀌면 원복합니다.
 - 테스트 실행 명령은 프로젝트 규칙 문서의 '명령'을 그대로 씁니다. 없으면 추측하지 않고 `blocked` 로 반환합니다.
 
 ## 작업 방식

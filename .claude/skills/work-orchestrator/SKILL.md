@@ -59,7 +59,7 @@ created: {YYYY-MM-DD HH:MM}
 | T06 integrate | orchestrator | pending | final.md, improvement-log.md |  |  |
 ```
 
-status 값: `pending` / `in_progress` / `done` / `blocked`(사유를 note 에 필수) / `skipped`. 각 단계 호출 직전에 `in_progress`, 직후에 결과를 반영해 갱신한다.
+status 값: `pending` / `in_progress` / `done` / `blocked`(사유를 note 에 필수) / `skipped`. 각 단계 호출 직전에 `in_progress`, 직후에 결과를 반영해 갱신한다. 이때 `updated` 와 note 까지 채워 `in_progress` 행이 남지 않게 하고, 승인·결정으로 상태가 바뀌면 산출물 안의 앞선 "보류·대기" 서술도 함께 고쳐 모순이 남지 않게 한다.
 
 ## 단계
 
