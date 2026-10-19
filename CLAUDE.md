@@ -10,7 +10,7 @@
 - "리뷰만 다시" / "구현부터 다시" / "이어서" / "regression skip 으로 다시" → `work-orchestrator`
 - "{폴더} 를 하네스에 추가" / "온보딩" / "개발 문서 만들어줘" → `project-onboarding`
 - "커밋해줘" / "/commit" → `commit`
-- "하네스 수정·점검·설계" / "에이전트·스킬 추가" → `harness-lab` (별도 설치, README 참고)
+- "하네스 수정·점검·설계" / "에이전트·스킬 추가" → `harness-lab`
 
 파이프라인: 대상 지정 → 설계 브리프 → **Gate 1 승인** → 구현 → 테스트 → 회귀 → 리뷰 → **Gate 2** → 마무리. 서브에이전트(`Agent` 도구)를 한 단계씩 호출하고 단계 사이는 파일로 넘긴다.
 `knowledge/docs/{그룹}/{대상}/overview.md` 가 없으면 파이프라인을 시작하지 않고 편입을 제안한다.
@@ -20,7 +20,7 @@
 | 무엇 | 어디 |
 | --- | --- |
 | 에이전트 | `.claude/agents/work-{architect,implementer,tester,reviewer}.md` |
-| 스킬 | `.claude/skills/` (`work-orchestrator`, `project-context-loader`, `design-brief`, `implementation-log`, `test-authoring-and-run`, `regression-run`, `code-review-checklist`, `project-onboarding`, `commit`) |
+| 스킬 | `.claude/skills/` (`work-orchestrator`, `project-context-loader`, `design-brief`, `implementation-log`, `test-authoring-and-run`, `regression-run`, `code-review-checklist`, `project-onboarding`, `commit`, `harness-lab`) |
 | 규칙 | `.claude/rules/commit.md` (커밋 규약. 절차는 `commit` 스킬) |
 | 프로젝트 지식 | `knowledge/docs/` (계약: `.claude/docs/README.md`, 인덱스: `knowledge/README.md`) |
 | 실행 산출물 | `knowledge/runs/`, `knowledge/baselines/` (계약: `.claude/docs/runs.md`) |

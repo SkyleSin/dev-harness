@@ -13,21 +13,7 @@ Claude Code 로 여러 프로젝트를 한 workplace 에서 개발할 때 쓰는
 
 ## 구성
 
-```
-.claude/
-├── agents/            work-architect, work-implementer, work-tester, work-reviewer
-├── skills/            work-orchestrator, project-context-loader, design-brief, implementation-log,
-│                      test-authoring-and-run, regression-run, code-review-checklist,
-│                      project-onboarding, commit
-├── rules/commit.md    커밋 규약 (절차는 commit 스킬)
-├── knowledge-template/  지식 저장소 골격: README.md (대상 인덱스), boundary.txt, docs/, runs/, baselines/
-├── docs/
-│   ├── README.md      프로젝트 문서 계약 (구조, 꼬리표, rules.md 고정 제목, reference/ 규칙)
-│   ├── runs.md        실행 산출물 계약 (파일 지도, status.md · decisions.md 양식, baseline)
-│   └── harness/       decisions.md, todo.md, changelog.md, lessons.md, boundary.txt (하네스 식별자)
-└── scripts/           check-harness.py (경계·형식 점검), hooks/pre-commit
-CLAUDE.md              라우팅과 위치 안내
-```
+에이전트 4개, 스킬 10개, 커밋 규약, 지식 저장소 골격(`.claude/knowledge-template/`), 문서 계약(`.claude/docs/README.md`, `runs.md`), 하네스 설계 기록(`.claude/docs/harness/`), 점검 스크립트와 pre-commit 훅으로 이루어진다. 파일별 위치는 `CLAUDE.md` 의 위치 표를 본다.
 
 ## 저장소 구성
 
@@ -58,9 +44,8 @@ workplace/            하네스 저장소 (이 저장소, 환경 공통)
    - `[harness-forbidden]`: 하네스에 나오면 안 되는 도메인 용어 (프레임워크, 사내 서비스·시스템 이름 등)
 4. 프로젝트 저장소를 workplace 아래에 clone 한다 (하네스·지식 저장소 모두 무시한다).
 5. `python3 -I .claude/scripts/check-harness.py` — 오류 0건이어야 한다.
-6. 별도 스킬 `harness-lab` 을 설치한다 (아래).
-7. workplace 에서 새 Claude Code 세션을 열고 첫 대상을 편입한다: "apps/service-a 를 하네스에 추가해줘" → `project-onboarding` 이 `overview.md`·`rules.md` 초안을 만들고 승인 후 저장한다.
-8. 이후 "apps/service-a 에 {기능} 추가해줘" 처럼 요청한다. 대상 문서가 없으면 파이프라인이 시작되지 않고 편입을 제안한다.
+6. workplace 에서 새 Claude Code 세션을 열고 첫 대상을 편입한다: "apps/service-a 를 하네스에 추가해줘" → `project-onboarding` 이 `overview.md`·`rules.md` 초안을 만들고 승인 후 저장한다.
+7. 이후 "apps/service-a 에 {기능} 추가해줘" 처럼 요청한다. 대상 문서가 없으면 파이프라인이 시작되지 않고 편입을 제안한다.
 
 ## 고칠 곳
 
@@ -68,17 +53,17 @@ workplace/            하네스 저장소 (이 저장소, 환경 공통)
 - **커밋 규약** `.claude/rules/commit.md`: 접두사 표를 조직의 이슈 트래커 형식에 맞춘다. 테스트 실행 방식은 `commit` 스킬 5단계에서 프로젝트에 맞게 바꾼다.
 - **프로젝트 규칙 문서** (`rules.md`): 테스트·lint·type 명령, 설계 브리프 추가 섹션, 리뷰 추가 점검 항목 등 도메인 지식은 모두 여기에 둔다. 스킬에 직접 넣지 않는다.
 
-## harness-lab (별도 설치)
+## harness-lab
 
-`harness-lab`(https://github.com/jikime/harness-lab)은 이 뼈대에 포함하지 않았다. 외부 스킬이므로 직접 설치한다. 이 뼈대는 아래처럼 개정한 버전을 전제한다.
+`harness-lab`(원본: https://github.com/jikime/harness-lab)은 하네스를 설계·점검·개선하는 스킬이며 `.claude/skills/harness-lab/` 에 포함되어 있다. 원본에서 아래처럼 개정했다.
 
-- 실행 하네스의 **기본 실행 모드를 Agent Team 에서 Subagent 순차로** 바꾼다. Agent Team(`TeamCreate`, `Task*`, `SendMessage`)은 사용자가 명시적으로 요청하고 도구가 실제로 보일 때만 쓰는 옵트인이다.
-- Subagent 최소 실행 계약을 둔다: 호출 계약(실행 폴더·입력·출력·제약을 프롬프트로 전달, 10줄 이내 반환), `status.md`, 질문·승인 중계, 산출물 확인, 모드 선언(도구가 없다고 조용히 우회하지 않음), 읽기 전용 역할의 병렬 확장.
+- 실행 하네스의 **기본 실행 모드를 Agent Team 에서 Subagent 순차로** 바꿨다. Agent Team(`TeamCreate`, `Task*`, `SendMessage`)은 사용자가 명시적으로 요청하고 도구가 실제로 보일 때만 쓰는 옵트인이다.
+- Subagent 최소 실행 계약을 두었다: 호출 계약(실행 폴더·입력·출력·제약을 프롬프트로 전달, 10줄 이내 반환), `status.md`, 질문·승인 중계, 산출물 확인, 모드 선언(도구가 없다고 조용히 우회하지 않음), 읽기 전용 역할의 병렬 확장.
 - 청사진 승인 게이트(파일 생성 전 청사진 제시)와 Phase 0~7 은 그대로 둔다.
 
 ## 포함하지 않은 것
 
-프로젝트 지식 문서, 실행 산출물, 테스트 baseline (모두 `knowledge/` 지식 저장소), 회사 고유 규약, `harness-lab` 본체.
+프로젝트 지식 문서, 실행 산출물, 테스트 baseline (모두 `knowledge/` 지식 저장소), 회사 고유 규약.
 
 ## 알려진 한계
 
