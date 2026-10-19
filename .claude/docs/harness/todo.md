@@ -5,8 +5,6 @@
 
 ## 가까운 일
 
-- [ ] `knowledge/boundary.txt` 의 `[doc-groups]` 와 `[harness-forbidden]` 을 실제 프로젝트에 맞게 채우기 (환경마다)
-- [ ] 첫 대상 하나를 `project-onboarding` 으로 편입 (`overview.md`, `rules.md` 작성)
 - [ ] 새 세션(workplace 에서 시작)에서 테스트 프롬프트 실행:
 
   | 유형 | 프롬프트 | 기대 |
@@ -17,7 +15,7 @@
   | 부정 | 프로젝트 지식 문서가 없는 폴더 | 파이프라인 시작 안 하고 편입 제안 |
   | 부정 | Task/Team 도구가 없는 환경 | 우회 없이 정상 동작 (Agent 도구만 사용) |
   | 반복 | "리뷰만 다시" | `status.md` 를 읽고 T05 만 재실행 |
-- [ ] 첫 실전: 소규모 기능 하나를 `work-orchestrator` 로 완주하고 막힌 지점을 `changelog.md` 에 기록
+- [x] 첫 실전: 소규모 기능 하나를 `work-orchestrator` 로 완주하고 막힌 지점을 `changelog.md` 에 기록 (2026-10-19 완료)
 
 ## 보류 · 추후
 
