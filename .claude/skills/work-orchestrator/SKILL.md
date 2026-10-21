@@ -38,7 +38,7 @@ description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를
 
 ## 실행 폴더와 status.md
 
-새 실행이면 `RUN_DIR` 을 만들고 `00-input.md`(대상, 요청 요약, 제약, `regression_mode`)와 `status.md` 를 저장한다.
+새 실행이면 `RUN_DIR` 을 만들고 `00-input.md`(대상, 요청 요약, 제약, `regression_mode`)와 `status.md` 를 저장한다. `00-input.md` 는 60줄 이하로 짧게 쓰고 긴 자료는 경로만 적는다.
 
 ```md
 mode: subagent
@@ -49,7 +49,7 @@ created: {YYYY-MM-DD HH:MM}
 | step | owner | status | output | updated | note |
 | --- | --- | --- | --- | --- | --- |
 | T00 input | orchestrator | done | 00-input.md |  |  |
-| T01 design | work-architect | pending | 01-design.md |  |  |
+| T01 design | work-architect | pending | 01-design.md, design.md |  |  |
 | Gate1 | 사용자 | pending |  |  |  |
 | T02 implement | work-implementer | pending | 02-implementation.md |  |  |
 | T03 test | work-tester | pending | 03-tests.md |  |  |
@@ -66,9 +66,9 @@ status 값: `pending` / `in_progress` / `done` / `blocked`(사유를 note 에 �
 | 단계 | 담당 | 입력 | 출력 | 선행 | 완료 기준 |
 | --- | --- | --- | --- | --- | --- |
 | T00 | orchestrator | 사용자 요청 | `00-input.md`, `status.md` | 없음 | 대상, 요약, regression_mode 정리 |
-| T01 | work-architect | `00-input.md`, `decisions.md`, 프로젝트 지식 | `01-design.md`, `decisions.md` | T00 | 브리프 완결, 미확정 항목이 `decisions.md` 에 등록 |
-| **Gate 1** | 사용자 | `01-design.md` | 승인 / 수정 | T01 | 명시적 승인 표현 |
-| T02 | work-implementer | `01-design.md` | 코드 diff, `02-implementation.md` | Gate 1 | 브리프 항목 100% + lint/type pass |
+| T01 | work-architect | `00-input.md`, `decisions.md`, 프로젝트 지식 | `01-design.md`, `design.md`, `decisions.md` | T00 | 브리프 완결, `design.md` 가 정본과 일치, 미확정 항목이 `decisions.md` 에 등록 |
+| **Gate 1** | 사용자 | `design.md`, `decisions.md` | 승인 / 수정 | T01 | 명시적 승인 표현 |
+| T02 | work-implementer | `01-design.md` (해당 단계 절) | 코드 diff, `02-implementation.md` | Gate 1 | 브리프 항목 100% + lint/type pass |
 | T03 | work-tester | `01`, `02` | 테스트 파일, `03-tests.md` | T02 | targeted 실행 완료 |
 | T04 | work-tester | `00`, `03` | `04-regression.md` (+ baseline) | T03 통과 | 전체 회귀 또는 skip 완료 |
 | T05 | work-reviewer | `01`~`04` | `05-review.md` | T04 | 항목별 근거 있는 판정 |
@@ -91,6 +91,8 @@ regression_mode: {full | skip}      (tester 만)
 반환: 에이전트 파일의 '반환 형식' 으로 10줄 이내
 ```
 
+`읽을 파일` 에 `01-design.md` 를 넣을 때 설계에 '단계별 읽기 범위' 표가 있으면 해당 단계의 절(공통 절 포함)만 읽도록 프롬프트에 적는다.
+
 호출 후:
 
 1. 쓸 파일이 실제로 생겼는지 확인한다. 없으면 `blocked` 로 기록하고 사용자에게 보고한다.
@@ -102,7 +104,7 @@ regression_mode: {full | skip}      (tester 만)
 ### Gate 1 (설계 승인)
 
 1. `decisions.md` 의 `[ ]` 항목 목록을 먼저 알린다.
-2. `01-design.md` 를 요약해서 보여주고 승인을 기다린다. 승인 표현이 없으면 T02 로 가지 않는다.
+2. `design.md`(읽기용 요약)를 보여주고 승인을 기다린다. `design.md` 가 없거나 `01-design.md` 와 어긋나면 architect 를 다시 불러 새로 쓰게 한다. 승인 표현이 없으면 T02 로 가지 않는다.
 3. 사용자가 `decisions.md` 에 단 질문(`  ->`)에 Claude 답(`  - `)이 없으면 먼저 답한다. 사용자 답이 달린 항목은 해결 여부를 판단해 `[x]` / `[ ]` 를 갱신한다 (`[x]` = 해결됨, 판단은 Claude).
 4. 결정이 설계를 바꾸면 architect 를 다시 호출한다.
 

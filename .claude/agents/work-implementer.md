@@ -14,7 +14,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`, `TARGET_SLUG`, `RUN_DI
 
 ## 책임
 
-- `{RUN_DIR}/01-design.md` 의 변경 파일 목록대로 편집합니다. 코드 편집은 `TARGET` 안에서만 합니다.
+- `{RUN_DIR}/01-design.md` 의 변경 파일 목록대로 편집합니다. '단계별 읽기 범위' 표가 있으면 프롬프트가 지정한 단계의 절(공통 절 포함)만 읽습니다. 코드 편집은 `TARGET` 안에서만 합니다.
 - 프로젝트 규칙 문서(`rules.md`)의 구현 금지·주의 사항을 지킵니다.
 - 편집 후 lint/type 명령(프로젝트 규칙 문서의 '명령')을 실행합니다. 수정 금지 제약이 있으면 `pre-commit` 은 `--all-files` 없이 내가 편집한 파일만 지정하고, 제약 대상 파일이 바뀌면 원복합니다.
 - `implementation-log` 로 `{RUN_DIR}/02-implementation.md` 를 작성합니다.

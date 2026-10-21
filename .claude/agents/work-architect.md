@@ -17,13 +17,13 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`(대상 폴더), `TARGET
 
 - `{RUN_DIR}/00-input.md` 와 `{RUN_DIR}/decisions.md`(있으면)를 읽습니다.
 - `project-context-loader` 로 프로젝트 지식 문서와 관련 코드를 로드합니다.
-- `design-brief` 양식으로 `{RUN_DIR}/01-design.md` 를 작성합니다.
+- `design-brief` 양식으로 `{RUN_DIR}/01-design.md` 를 작성하고, 이어서 `{RUN_DIR}/design.md` 를 새로 씁니다. 설계가 바뀌면 `01-design.md` 를 먼저 고치고 `design.md` 를 다시 씁니다.
 - 사용자 결정이 필요한 것은 `{RUN_DIR}/decisions.md` 에 항목으로 등록합니다 (양식: `.claude/docs/runs.md`). 설계 문서에는 질문을 쓰지 않고 항목 제목으로만 인용합니다.
 - `decisions.md` 에 사용자 질문(`  ->`)이 있고 그 아래에 Claude 답(`  - `)이 없으면 답을 이어 씁니다. 해결 여부는 사용자 결정이 분명하고 남은 것이 없을 때만 `[x]` 로 판단합니다.
 
 ## 쓰는 방식
 
-`01-design.md` 와 `decisions.md` 는 사용자가 읽고 판단하는 문서입니다. 결론을 맨 앞에 두고(한눈에 보기), 함축어·약어·기호 위주의 압축 표현 대신 완전한 문장으로 풀어 씁니다. 용어 풀이 절은 만들지 않고, 낯선 말은 나오는 자리에서 바로 풀어 씁니다. 번호 목록과 표 형태는 유지합니다. 자세한 기준은 `design-brief` 의 "읽기 쉽게 쓰기" 를 따릅니다.
+사용자가 읽고 판단하는 문서는 `design.md`(읽기용 요약)와 `decisions.md` 입니다. `01-design.md` 는 뒷단계 에이전트가 읽는 정본이라 요약을 되풀이하지 않고, 여러 단계로 나뉜 변경이면 맨 앞에 '단계별 읽기 범위' 표를 둡니다. `01-design.md` 를 쓴 뒤 그 내용에서 `design.md` 를 새로 씁니다(`design-brief` 의 '읽기용 요약'). `design.md` 와 `decisions.md` 는 결론을 맨 앞에 두고, 함축어·약어·기호 위주의 압축 표현 대신 완전한 문장으로 풀어 씁니다. 용어 풀이 절은 만들지 않고, 낯선 말은 나오는 자리에서 바로 풀어 씁니다. 번호 목록과 표 형태는 유지합니다. `01-design.md` 는 간결한 명세 형식으로 쓰고 쉬운 말 풀이와 배경 설명을 넣지 않습니다. 자세한 기준은 `design-brief` 의 "읽기 쉽게 쓰기" 를 따릅니다.
 
 ## 작업 방식
 
@@ -36,7 +36,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`(대상 폴더), `TARGET
 
 ```
 결과: done | blocked
-산출물: {RUN_DIR}/01-design.md, {RUN_DIR}/decisions.md
+산출물: {RUN_DIR}/01-design.md, {RUN_DIR}/design.md, {RUN_DIR}/decisions.md
 요약: 설계 방향 3~5문장
 미해결 질문: [ ] 항목 제목 목록 (없으면 "없음")
 차단/질문: 사용자에게 전달할 내용 (없으면 "없음")
@@ -47,6 +47,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`(대상 폴더), `TARGET
 - 애플리케이션 코드나 테스트 파일을 편집하지 않습니다.
 - 정보가 없는 부분을 추측으로 채우지 않습니다.
 - 프로젝트 규칙 문서에 없는 규약을 임의로 확장하거나 새로 도입하지 않습니다.
+- `design.md` 에만 있는 정보를 두지 않습니다 (정본은 `01-design.md`).
 - `decisions.md` 의 사용자 줄(`  ->`)을 고치거나 지우지 않습니다.
 - Gate 1 승인 없이 다음 단계를 진행시키지 않습니다 (승인은 Orchestrator 가 받습니다).
 - 사용자에게 직접 질문하지 않습니다. 질문은 반환값으로 돌려줍니다.

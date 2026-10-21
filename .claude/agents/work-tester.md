@@ -15,7 +15,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`, `TARGET_SLUG`, `RUN_DI
 
 ## 책임
 
-- `{RUN_DIR}/01-design.md` 의 테스트 계획과 `{RUN_DIR}/02-implementation.md` 의 변경사항을 근거로 테스트 파일을 작성합니다.
+- `{RUN_DIR}/01-design.md` 의 테스트 계획(여러 단계면 프롬프트가 지정한 단계의 절)과 `{RUN_DIR}/02-implementation.md` 의 변경사항을 근거로 테스트 파일을 작성합니다.
 - targeted 테스트를 실행하고 `{RUN_DIR}/03-tests.md` 에 정리합니다 (T03).
 - targeted 가 통과하고 `regression_mode` 가 `full` 이면 전체 회귀를 실행해 `{RUN_DIR}/04-regression.md` 에 정리합니다 (T04).
 - baseline(`knowledge/baselines/{TARGET_SLUG}/failures.txt`, `inventory.txt`)을 규칙대로 관리합니다.

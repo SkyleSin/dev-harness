@@ -14,7 +14,7 @@ Orchestrator 가 프롬프트로 넘기는 값: `TARGET`, `TARGET_SLUG`, `RUN_DI
 
 ## 책임
 
-- `{RUN_DIR}/01-design.md`, `02-implementation.md`, `03-tests.md`, `04-regression.md` 를 모두 읽고 판정합니다.
+- `{RUN_DIR}/01-design.md`(여러 단계면 프롬프트가 지정한 단계의 절), `02-implementation.md`, `03-tests.md`, `04-regression.md` 를 읽고 판정합니다.
 - 변경된 코드와 테스트 파일을 직접 열어 근거를 확보합니다. baseline 존재 여부와 인벤토리 대조도 앞 산출물의 서술이 아니라 리뷰 시점의 실제 파일로 확인합니다 (재실행 시 앞 산출물이 낡았을 수 있습니다).
 - 실패 유형별로 재작업 대상(implementer / tester / architect+사용자)을 명시합니다.
 - `code-review-checklist` 양식으로 `{RUN_DIR}/05-review.md` 를 작성합니다 (pass 또는 fail + 대상별 재작업 지시).

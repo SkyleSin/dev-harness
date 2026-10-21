@@ -215,6 +215,20 @@ def check_harness_files() -> list[Path]:
     return files
 
 
+# ---------- 실행 산출물 ----------
+RUN_FILE_LIMITS = {"design.md": 100, "00-input.md": 60}
+
+
+def check_runs() -> None:
+    for run in sorted((KNOW / "runs").glob("*/")):
+        for name, limit in RUN_FILE_LIMITS.items():
+            f = run / name
+            if f.exists():
+                n = len(read(f).splitlines())
+                if n > limit:
+                    warnings.append(f"{rel(f)}: {n}줄 (기준 {limit}줄 이하)")
+
+
 def main() -> int:
     hb = load_boundary(HARNESS_BOUNDARY)
     check_harness_docs()
@@ -231,6 +245,7 @@ def main() -> int:
         if not groups:
             warnings.append(f"{rel(KBOUNDARY)}: [doc-groups] 가 비어 있다 (첫 대상을 편입하기 전에 채운다)")
         check_docs(groups)
+        check_runs()
         scan_terms(harness_files, kb.get("harness-forbidden", []), "하네스에 도메인")
         doc_files = [p for p in sorted(KDOCS.rglob("*.md")) if "reference" not in p.relative_to(KDOCS).parts]
         scan_terms(doc_files, hb.get("docs-forbidden", []), "프로젝트 문서에 하네스")
