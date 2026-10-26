@@ -108,6 +108,7 @@ regression_mode: {full | skip}      (tester 만)
 2. `design.md`(읽기용 요약)를 보여주고 승인을 기다린다. `design.md` 가 없거나 `01-design.md` 와 어긋나면 architect 를 다시 불러 새로 쓰게 한다. 승인 표현이 없으면 T02 로 가지 않는다.
 3. 사용자가 `decisions.md` 에 단 질문(`  ->`)에 Claude 답(`  - `)이 없으면 먼저 답한다. 사용자 답이 달린 항목은 해결 여부를 판단해 `[x]` / `[ ]` 를 갱신한다 (`[x]` = 해결됨, 판단은 Claude).
 4. 결정이 설계를 바꾸면 architect 를 다시 호출한다.
+5. 승인 전후에 요청 자체가 바뀌면(별개 → 대체, 범위 변경) 기존 Gate 1 승인은 무효다. `00-input.md` 에 변경 사실을 한 줄 남기고, `status.md` 의 Gate 1 을 `pending` 으로 되돌리고, architect 를 다시 호출해 `01-design.md` 와 `design.md` 를 새 요청 기준으로 쓰게 한 뒤 재승인을 받는다. 폐기된 설계 서술이 남지 않게 한다.
 
 ### Gate 2 (리뷰 판정)
 
@@ -126,7 +127,7 @@ regression_mode: {full | skip}      (tester 만)
 
 ## T06 마무리
 
-- `final.md`: 요청 요약, 변경 파일 목록, 테스트·회귀 결과, 남은 위험, **커밋 메시지 초안**(`.claude/rules/commit.md` 형식: 제목 + 본문 한두 줄, 결과물만), 프로젝트 규칙 문서의 '배포 노트 항목' 중 해당 사항, **커밋이 필요한 저장소**(코드 저장소의 변경, `knowledge/` 의 `runs/` · baseline · 승인된 문서 변경).
+- `final.md`: 요청 요약, 변경 파일 목록, 테스트·회귀 결과, 남은 위험, **커밋 메시지 초안**(`.claude/rules/commit.md` 형식: 제목 + 본문 한두 줄, 결과물만), 프로젝트 규칙 문서의 '배포 노트 항목' 중 해당 사항, **커밋이 필요한 저장소**(코드 저장소의 변경, `knowledge/` 의 `runs/` · baseline · 승인된 문서 변경). 승인 대기 중인 `baseline-proposal/` 이 있으면 남은 일로 적는다.
 - `improvement-log.md`: 프로젝트 지식 문서 갱신 후보(`02-implementation.md` 의 '지식 문서 반영 후보' 포함), 하네스 개선 아이디어, 이번 실행의 특이점. 문서 반영은 후보로만 남기고 사용자가 승인하면 따로 한다.
 - 커밋·푸시·PR·배포는 하지 않는다. 커밋은 사용자가 요청할 때 `commit.md` 에 따라 한다.
 

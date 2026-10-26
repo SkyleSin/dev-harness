@@ -80,6 +80,7 @@ status 값: `pending` / `in_progress` / `done` / `blocked`(사유 필수) / `ski
 - `failures.txt` — **알려진 실패** 노드 ID. 실패가 0건이면 빈 파일이 정상이다.
 - `inventory.txt` — **통과한 전체** 노드 ID. 테스트 소실 감지용.
 - 두 파일의 성격을 섞지 않는다. 자세한 규칙은 `regression-run` 스킬.
+- 최초 baseline 은 tester 가 직접 저장하지 않고 `{RUN_DIR}/baseline-proposal/` 에 제안으로 만든다. 사용자 승인 뒤 이 폴더로 옮긴다.
 
 ## 승인 게이트
 

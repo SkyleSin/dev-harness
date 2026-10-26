@@ -28,7 +28,7 @@ baseline 위치: `knowledge/baselines/{TARGET_SLUG}/`
 
    - 각 파일 한 줄에 노드 ID 하나.
    - 실패가 0건이면 `failures.txt` 는 **빈 파일이 정상**이다. 통과 목록을 여기 넣으면 delta 규칙이 정반대로 동작한다 (통과하던 테스트가 깨졌을 때 "기존 실패" 로 오분류).
-   - 각 파일이 없으면 이번 실행 결과로 최초 저장하고 그렇게 표기한다.
+   - 각 파일이 없으면 `knowledge/baselines/` 에 쓰지 않고 `{RUN_DIR}/baseline-proposal/` 에 이번 실행 결과로 제안을 만들어 "최초 제안(승인 대기)" 로 표기한다. 사용자 승인 뒤 오케스트레이터가 `knowledge/baselines/{TARGET_SLUG}/` 로 옮긴다.
 5. Delta 규칙 (`failures.txt` 기준):
    - 현재 실패 ∈ baseline → 기존 실패 (무시, `improvement-log.md` 기록 후보)
    - 현재 실패 ∉ baseline → **회귀 (blocker)**
@@ -56,8 +56,8 @@ baseline 위치: `knowledge/baselines/{TARGET_SLUG}/`
 
 ## Baseline 상태
 - 경로: `knowledge/baselines/{TARGET_SLUG}/`
-- failures: {최초 저장 / 갱신 없음 / 항목 제거 N건}
-- inventory: {최초 저장 / 갱신됨 / 소실 N건}
+- failures: {최초 제안(승인 대기) / 갱신 없음 / 항목 제거 N건}
+- inventory: {최초 제안(승인 대기) / 갱신됨 / 소실 N건}
 
 ## 회귀 (신규 실패)
 | 노드 ID | 실패 요지 | 근거 로그 |
