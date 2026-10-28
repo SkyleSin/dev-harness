@@ -20,7 +20,7 @@ knowledge/
 | `00-input.md` | orchestrator | 전원 | 요청 정리, `regression_mode` (60줄 이하, 긴 자료는 경로만 적는다) |
 | `01-design.md` | work-architect | implementer, tester, reviewer | 설계 정본. 여러 단계면 맨 앞에 '단계별 읽기 범위' 표 |
 | `design.md` | work-architect | Gate 1 사용자 | `01-design.md` 에서 뽑아 쓴 읽기용 요약 (80줄 안팎) |
-| `decisions.md` | architect(항목 등록) + 사용자(답) + Claude(답변·체크) | architect, Gate 1 사용자, 이후 전원 | 질문·답변·결정 기록 |
+| `decisions.md` | architect·orchestrator(항목 등록) + 사용자(답) + Claude(답변·체크) | architect, 사용자, 이후 전원 | 결정·승인 요청과 답변 기록 (양식: '결정과 승인 기록' 절) |
 | `02-implementation.md` | work-implementer | tester, reviewer | 변경 요약 |
 | `03-tests.md` | work-tester | reviewer | targeted 테스트 결과 |
 | `04-regression.md` | work-tester | reviewer | 전체 회귀 결과 |
@@ -65,6 +65,36 @@ status 값: `pending` / `in_progress` / `done` / `blocked`(사유 필수) / `ski
 - 설계는 `[x]` 항목만 확정으로 취급한다. `[ ]` 항목은 권장안을 가정하되 설계에 "미확정 (decisions.md: 제목)" 으로 표시한다.
 - Gate 1 에서 `[ ]` 항목 목록을 먼저 사용자에게 알린다.
 
+## 결정과 승인 기록
+
+`decisions.md` 는 설계 단계의 질문뿐 아니라 파이프라인 중 사용자에게 받아야 하는 모든 승인과 결정을 담는다. 사용자가 채팅창에서 질문을 찾아 답하지 않고 이 파일에서 한꺼번에 읽고 답하게 하려는 것이다. 문체는 `.claude/rules/user-communication.md` 를 따른다.
+
+항목은 유형 꼬리표를 붙인다. 꼬리표가 없는 기존 항목은 `[결정]` 으로 본다.
+
+| 유형 | 용도 | 제목 형식 | 해결 조건 |
+| --- | --- | --- | --- |
+| `[결정]` | 방향을 고르는 질문 | `- [ ] [결정] ...할까요?` | 위의 `[x]` 규칙 |
+| `[승인]` | 허락 한 건 | `- [ ] [승인] ...을 승인하시겠습니까?` | `->` 줄에 명시적 승인 표현이 있을 때만 `[x]`. 빈 칸은 승인이 아니다 |
+
+등록 주체와 시점:
+
+| 상황 | 등록하는 쪽 | 유형 |
+| --- | --- | --- |
+| 설계 중 정해야 할 결정 | architect | `[결정]` |
+| 설계 승인 (Gate 1) | orchestrator, architect 반환 직후 | `[승인]` |
+| 요청 변경으로 기존 승인이 무효가 됨 | orchestrator | `[승인]` (새 항목) |
+| 에이전트가 돌려준 "결정 필요", 리뷰어의 "사용자 재확인 요청" | orchestrator | `[결정]` |
+| 위험 경고가 있는 회귀 skip 확정, 재작업 두 번째 실패 후 진행 방향, 브리프 애매 확인 | orchestrator | `[결정]` |
+| 최초 baseline 제안을 `knowledge/baselines/` 로 옮기기 | orchestrator | `[승인]` |
+
+규칙:
+
+- 항목마다 배경, 선택지(승인이면 "승인 / 수정 요청"), 권장안, 선택에 따른 결과를 `  - ` 줄에 풀어 쓰고 끝에 빈 `  ->` 줄을 둔다.
+- 채팅에는 등록했다는 안내와 건수만 쓴다. 질문 내용을 채팅에 되풀이하지 않는다.
+- 사용자가 채팅으로 답하면 orchestrator 가 해당 항목의 `->` 줄에 `(채팅 답변, {날짜}) 답 내용` 으로 옮겨 적은 뒤 진행한다. 어느 항목에 대한 답인지 애매하면 확인한다.
+- 승인 항목이 `[ ]` 인 동안에는 그 승인이 필요한 단계로 가지 않는다.
+- 실행 폴더가 생기기 전의 확인은 파일이 없으므로 채팅으로 한다.
+
 ## design.md (읽기용 요약)
 
 - `01-design.md` 가 정본이다. `design.md` 는 `01-design.md` 를 다 쓴 뒤 그 내용에서 뽑아 새로 쓰고, `design.md` 에만 있는 정보는 두지 않는다.
@@ -84,8 +114,9 @@ status 값: `pending` / `in_progress` / `done` / `blocked`(사유 필수) / `ski
 
 ## 승인 게이트
 
-- **Gate 1** (`design.md` 와 `decisions.md` 를 보고): 사용자가 설계를 승인해야 T02 진행.
+- **Gate 1** (`design.md` 와 `decisions.md` 를 보고): `decisions.md` 의 설계 `[승인]` 항목에 사용자가 승인해야 T02 진행.
 - **Gate 2** (`05-review.md` 뒤): 리뷰가 pass 여야 `final.md` 진행.
+- 승인과 결정 요청은 모두 `decisions.md` 항목으로 등록한다 ('결정과 승인 기록' 절).
 
 ## 실패 라우팅
 
@@ -97,4 +128,4 @@ status 값: `pending` / `in_progress` / `done` / `blocked`(사유 필수) / `ski
 | 테스트 이슈 | tester 재작업 |
 | 브리프 애매 | architect + 사용자 |
 
-재작업은 대상별 최대 1회이고 두 번째 실패는 사용자에게 보고한다.
+재작업은 대상별 최대 1회이고 두 번째 실패는 `decisions.md` 에 `[결정]` 항목으로 등록해 사용자에게 알린다.

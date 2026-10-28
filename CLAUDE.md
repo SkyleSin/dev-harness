@@ -22,7 +22,7 @@
 | --- | --- |
 | 에이전트 | `.claude/agents/work-{architect,implementer,tester,reviewer}.md` |
 | 스킬 | `.claude/skills/` (`work-orchestrator`, `project-context-loader`, `design-brief`, `implementation-log`, `test-authoring-and-run`, `regression-run`, `code-review-checklist`, `project-onboarding`, `commit`, `harness-lab`) |
-| 규칙 | `.claude/rules/commit.md` (커밋 규약. 절차는 `commit` 스킬) |
+| 규칙 | `.claude/rules/commit.md` (커밋 규약. 절차는 `commit` 스킬), `.claude/rules/user-communication.md` (사용자에게 묻고 보고하는 문체, 승인·결정은 `decisions.md` 항목으로) |
 | 프로젝트 지식 | `knowledge/docs/` (계약: `.claude/docs/README.md`, 인덱스: `knowledge/README.md`) |
 | 실행 산출물 | `knowledge/runs/`, `knowledge/baselines/` (계약: `.claude/docs/runs.md`) |
 | 지식 저장소 골격 | `.claude/knowledge-template/` (새 환경에서 `knowledge/` 를 만들 때 복사) |
