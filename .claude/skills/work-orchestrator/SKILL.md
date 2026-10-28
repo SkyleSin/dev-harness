@@ -1,6 +1,6 @@
 ---
 name: work-orchestrator
-description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를 지정한 기능 추가·변경·리팩터링 요청을 설계-구현-테스트-회귀-리뷰 파이프라인으로 처리한다. 초기 실행뿐 아니라 "이어서", "리뷰만 다시", "테스트만 다시", "구현부터 다시", "regression skip 으로 다시", "부분 수정" 같은 재실행 요청도 처리한다. 자연어 예) "apps/service-a 에 X 추가해줘", "service-b 의 Y 리팩터링", "리뷰만 다시 실행". 대상 폴더의 코드 변경이면 한 줄·문구·docstring 수정처럼 작은 요청도 이 스킬을 거치며 직접 편집하지 않는다. 하네스 자체를 고치는 요청은 harness-lab 이 맡는다.
+description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를 지정한 기능 추가·변경·리팩터링 요청을 설계-구현-테스트-회귀-리뷰 파이프라인으로 처리한다. 초기 실행뿐 아니라 "이어서", "리뷰만 다시", "테스트만 다시", "구현부터 다시", "regression skip 으로 다시", "부분 수정" 같은 재실행 요청도 처리한다. 자연어 예) "apps/service-a 에 X 추가해줘", "service-b 의 Y 리팩터링", "리뷰만 다시 실행". 대상 폴더의 코드 변경이면 한 줄·문구·docstring 수정처럼 작은 요청도 이 스킬을 거치며 직접 편집하지 않는다. 동작을 바꾸지 않는 작은 수정은 설계·리뷰를 생략하는 간단 경로로 처리한다. 하네스 자체를 고치는 요청은 harness-lab 이 맡는다.
 ---
 
 # work-orchestrator
@@ -46,6 +46,7 @@ description: workplace 의 대상 폴더(예 apps/service-a, tools/service-b)를
 mode: subagent
 target: {TARGET}
 regression_mode: full | skip
+path: full | light
 created: {YYYY-MM-DD HH:MM}
 
 | step | owner | status | output | updated | note |
@@ -132,6 +133,23 @@ regression_mode: {full | skip}      (tester 만)
 - `final.md`: 요청 요약, 변경 파일 목록, 테스트·회귀 결과, 남은 위험, **커밋 메시지 초안**(`.claude/rules/commit.md` 형식: 제목 + 본문 한두 줄, 결과물만), 프로젝트 규칙 문서의 '배포 노트 항목' 중 해당 사항, **커밋이 필요한 저장소**(코드 저장소의 변경, `knowledge/` 의 `runs/` · baseline · 승인된 문서 변경). `baseline-proposal/` 이 있으면 `decisions.md` 에 "baseline 을 `knowledge/baselines/` 로 옮기겠습니까?" `[승인]` 항목을 등록하고(제안 내용의 노드 수와 실패 건수를 풀어 쓴다), `final.md` 에는 그 항목이 남은 일이라고 적는다. 승인되면 옮기고 `final.md` 의 낡은 대기 서술을 고친다.
 - `improvement-log.md`: 프로젝트 지식 문서 갱신 후보(`02-implementation.md` 의 '지식 문서 반영 후보' 포함), 하네스 개선 아이디어, 이번 실행의 특이점. 문서 반영은 후보로만 남기고 사용자가 승인하면 따로 한다.
 - 커밋·푸시·PR·배포는 하지 않는다. 커밋은 사용자가 요청할 때 `commit.md` 에 따라 한다.
+
+## 간단 경로 (light)
+
+동작을 바꾸지 않는 작은 수정에 설계 브리프·설계 승인·리뷰까지 돌리는 것은 과하다. 아래 조건을 **모두** 만족하면 설계와 리뷰를 생략하고, 구현과 테스트·회귀는 그대로 한다. 직접 편집하지 않는다는 원칙은 같다.
+
+**조건:** ① 동작을 바꾸지 않는 수정(죽은 코드 삭제, 문구·docstring, 이름 변경, 포맷) ② 한 파일 안에서 끝나고 바뀌는 줄이 20줄 안팎 이하 ③ 마이그레이션, 외부 계약(API 형식, 다른 서비스와 맞물린 값), 공개 인터페이스를 건드리지 않음. 파일이 회귀 위험 신호 경로여도 변경의 성격이 조건에 맞으면 가능하다. 하나라도 애매하면 전체 경로로 간다.
+
+**판정과 알림:** 진입 확인 뒤 실행 폴더를 만들기 전에 orchestrator 가 조건을 확인한다. 만족하면 채팅으로 근거와 함께 "간단 경로로 처리합니다. 전체 경로를 원하시면 말씀해 주세요" 라고 알리고 진행한다 (`user-communication.md` 문체). 사용자가 전체 경로를 원하면 그대로 따른다.
+
+**진행:**
+1. `00-input.md` 에 요청, 변경 대상 파일과 범위, 동작이 바뀌지 않는다는 근거를 쓰고 `status.md` 에 `path: light` 로 기록한다. 이 요청 자체가 승인이므로 T01·Gate 1·T05·Gate 2 행은 `skipped`(note: light) 로 둔다.
+2. implementer(T02)를 호출한다. 프롬프트에 "설계 브리프는 없다. `00-input.md` 의 변경 내용이 브리프다" 라고 적는다.
+3. tester(T03·T04)를 호출한다. targeted 테스트와 전체 회귀는 전체 경로와 같다. 최초 baseline 제안이 생기면 `[승인]` 항목 절차를 따른다.
+4. orchestrator 가 변경 내용(`git diff`)을 요청과 대조한다: 요청한 변경만 있는지, 한 파일이고 20줄 안팎 이하인지, 테스트·회귀 결과가 통과인지.
+5. `light.md` 를 쓴다: 요청, 바뀐 파일과 줄, 테스트·회귀 결과, 4번 확인 결과, 커밋 메시지 초안(`commit.md` 형식), 커밋이 필요한 저장소. `final.md`, `improvement-log.md` 는 만들지 않는다. 지식 문서 반영 후보가 생겼으면 `light.md` 에 적는다.
+
+**전체 경로로 올리는 경우:** 구현 중 조건을 벗어나는 것이 드러나거나(동작이 바뀜, 파일이 늘어남, 줄 수 초과) 테스트·회귀가 실패하면 멈춘다. 왜 올리는지를 풀어서 알리고, `status.md` 의 `path` 를 `full` 로 바꾸고 note 에 사유를 남긴 뒤 T01(architect)부터 전체 경로로 진행한다. 기존 변경은 설계에 반영시킨다.
 
 ## 후속 요청 처리
 

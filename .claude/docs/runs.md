@@ -25,6 +25,7 @@ knowledge/
 | `03-tests.md` | work-tester | reviewer | targeted 테스트 결과 |
 | `04-regression.md` | work-tester | reviewer | 전체 회귀 결과 |
 | `05-review.md` | work-reviewer | orchestrator(Gate 2) | 최종 판정 |
+| `light.md` | orchestrator | 사용자, 다음 실행 | 간단 경로 전용 요약: `final.md` 와 `improvement-log.md` 를 대신한다. 이 경로에는 `01`, `design.md`, `decisions.md`(승인 항목 제외), `05` 가 없다 |
 | `final.md` | orchestrator | 사용자, 다음 실행 | 커밋 메시지 초안, 변경 요약, 남은 위험, 커밋이 필요한 저장소(코드·`knowledge/`) |
 | `improvement-log.md` | orchestrator | 다음 개선 | 프로젝트 문서 갱신 후보, 하네스 개선 아이디어 |
 
@@ -36,6 +37,7 @@ knowledge/
 mode: subagent
 target: apps/service-a
 regression_mode: full | skip
+path: full | light
 created: 2026-10-16 14:00
 
 | step | owner | status | output | updated | note |
