@@ -131,7 +131,7 @@ regression_mode: {full | skip}      (tester 만)
 ## T06 마무리
 
 - `final.md`: 요청 요약, 변경 파일 목록, 테스트·회귀 결과, 남은 위험, **커밋 메시지 초안**(`.claude/rules/commit.md` 형식: 제목 + 본문 한두 줄, 결과물만), 프로젝트 규칙 문서의 '배포 노트 항목' 중 해당 사항, **커밋이 필요한 저장소**(코드 저장소의 변경, `knowledge/` 의 `runs/` · baseline · 승인된 문서 변경). `baseline-proposal/` 이 있으면 `decisions.md` 에 "baseline 을 `knowledge/baselines/` 로 옮기겠습니까?" `[승인]` 항목을 등록하고(제안 내용의 노드 수와 실패 건수를 풀어 쓴다), `final.md` 에는 그 항목이 남은 일이라고 적는다. 승인되면 옮기고 `final.md` 의 낡은 대기 서술을 고친다.
-- `improvement-log.md`: 프로젝트 지식 문서 갱신 후보(`02-implementation.md` 의 '지식 문서 반영 후보' 포함), 하네스 개선 아이디어, 이번 실행의 특이점. 문서 반영은 후보로만 남기고 사용자가 승인하면 따로 한다.
+- `improvement-log.md`: 프로젝트 지식 문서 갱신 후보(`02-implementation.md` 의 '지식 문서 반영 후보' 포함), 하네스 개선 아이디어, 이번 실행의 특이점. 문서 반영은 후보로만 남긴다. 사실 갱신은 사용자가 커밋을 요청할 때 `commit` 스킬이 반영하고, 의미 판단 후보는 사용자 승인을 받아 따로 한다.
 - 커밋·푸시·PR·배포는 하지 않는다. 커밋은 사용자가 요청할 때 `commit.md` 에 따라 한다.
 
 ## 간단 경로 (light)
