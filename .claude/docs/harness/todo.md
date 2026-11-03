@@ -9,6 +9,12 @@
 - [x] 실패 위험 경로 확인 (2026-10-19 완료): 결함을 심은 버리는 브랜치에서 targeted 실패 분류 → 회귀 skip → 리뷰 fail → 사용자 결정 요청까지 확인. 원인이 설계 밖이라 재작업 없이 Gate 2 에서 멈췄고, 스킬 문구는 그대로 유지
 - [x] 첫 실전: 소규모 기능 하나를 `work-orchestrator` 로 완주하고 막힌 지점을 `changelog.md` 에 기록 (2026-10-19 완료)
 
+## 가까운 일 (이관 3단계 마무리 뒤에 처리)
+
+- [ ] 세 단계 이상의 대상 경로 지원: 점검 스크립트(`check-harness.py`)가 문서 위치를 `knowledge/docs/{그룹}/{대상}` 두 단계로만 읽어, `v2/packages/malt-schemas` 같은 대상은 `v2/malt-schemas` 로 이름을 바꿔 편입했고 `work-orchestrator` 진입 확인이 문서를 자동으로 찾지 못한다. 대상 경로와 문서 위치의 대응 규칙(또는 세 단계 허용)과 `project-onboarding`·`project-context-loader` 의 경로 처리를 정한다
+- [ ] 구현 뒤에 요청이 바뀌었을 때의 재실행 절차: 이전 산출물(`02`~`05`, `final.md`, `baseline-proposal/`)을 `archive/` 로 보관하고 각 단계를 `pending` 으로 되돌리며, 이미 받은 baseline 승인을 무효로 처리하는 절차를 `work-orchestrator` 에 명시한다 (malt-schemas P1 에서 설계 승인을 세 번 받음)
+- [ ] 설계의 예상 테스트 건수와 실제 건수가 어긋나지 않게, 파라미터 테스트를 건수에 어떻게 세는지 설계 단계의 집계 기준을 정한다 (jira-uploader C 단계: 신규 예상 약 24건, 실제 39건)
+
 ## 보류 · 추후
 
 - [ ] 설계 문서가 계속 길면 `01-design.md` 의 부록(특히 테스트 케이스 목록)을 실행 폴더의 `design/` 폴더로 분리해 해당 단계 실행 때만 읽게 한다. 단계별 읽기 범위 표로 부족하다고 확인된 뒤에 도입
